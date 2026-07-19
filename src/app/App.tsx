@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactElement } from "react";
 import {
   HashRouter,
   Routes,
@@ -83,7 +83,7 @@ function Header() {
   );
 }
 
-function Guard({ children }: { children: JSX.Element }) {
+function Guard({ children }: { children: ReactElement }) {
   const profile = useRocketState((s) => s.profile);
   if (!profile) return <Navigate to="/" replace />;
   return children;

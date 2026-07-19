@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactElement } from "react";
 import type { GeneratedTask } from "../engine/types";
 import { checkAnswer } from "../engine/types";
 import { adaptiveHint } from "../ai/hints";
@@ -23,7 +23,7 @@ import { DataChartWidget } from "./widgets/DataChartWidget";
 import { RiskDialWidget } from "./widgets/RiskDialWidget";
 import type { WidgetProps } from "./widgets/types";
 
-const WIDGETS: Record<string, (p: WidgetProps) => JSX.Element> = {
+const WIDGETS: Record<string, (p: WidgetProps) => ReactElement> = {
   protractor: ProtractorWidget,
   ruler: RulerWidget,
   fuelGauge: FuelGaugeWidget,

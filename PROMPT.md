@@ -1,7 +1,12 @@
-# Artie's Rocket Lab — Full Build Prompt (from scratch)
+# Rocket Lab — Full Build Prompt (from scratch)
 
 > **Give this entire document to an AI coding agent. It contains everything needed
 > to build the project from zero.**
+
+The app is called **Rocket Lab**. It is not Artie-specific: before a profile is
+picked it presents neutrally as "ROCKET LAB", and once a commander is chosen
+ALL branding personalises to **"{Name}'s Rocket Lab"** — "Artie's Rocket Lab",
+"Walter's Rocket Lab", or whatever name was created on the roster.
 
 ---
 
@@ -24,6 +29,12 @@ profile has its own rocket, XP, mastery, mission history and launch site,
 completely independent of the others. Artie is the design persona throughout
 this document, but nothing may hard-code his name.
 
+**Branding rule**: the roster screen (and any state with no active profile)
+is titled "ROCKET LAB". The moment a profile is active, the app title, Hangar
+header, browser tab title (`document.title`), after-action reports and Flight
+Log all read **"{Name}'s Rocket Lab"** — the whole lab belongs to whoever is
+signed in.
+
 ---
 
 ## 2. The Core Concept: Kerbal-style Rocket Lab
@@ -36,11 +47,12 @@ maths is the tool that makes the engineering work.
 ### How it works (end-to-end flow)
 
 ```
-APP LOAD
+APP LOAD — titled "ROCKET LAB" (no profile active yet)
   → COMMANDER ROSTER: pick your profile (e.g. Artie / Walter / ➕ New Commander)
       • Each profile card shows name, rocket thumbnail, XP and launch streak
       • Creating a profile just needs a name — no passwords, no accounts
       • All progress, mastery, missions and the rocket itself are per-profile
+      • On pick, the app becomes "{NAME}'S ROCKET LAB" everywhere
 
 HANGAR (home)
   → First visit: pick your LAUNCH SITE (real global spaceports — see §5b)
@@ -1300,8 +1312,16 @@ master a KS3 domain, first Interstellar launch.
 - **Neon text glow** on key labels (cyan-on-dark)
 - No clutter — big touch targets, lots of breathing room
 
+### Branding & personalisation
+- App name: **Rocket Lab**. With no active profile (roster screen), show
+  "ROCKET LAB"; with a profile active, show "{NAME}'S ROCKET LAB" in the
+  header/logo and set `document.title` to "{Name}'s Rocket Lab"
+- The possessive is real, not decorative — the Hangar, Flight Log and reports
+  should feel like *this child's* lab (their name on the mission patches
+  screen, their rocket on the pad, the Flight Director addressing them)
+
 ### Tone
-- Artie is "Commander" — he's respected and trusted
+- The player is "Commander {Name}" — respected and trusted
 - Correct: "Locked in! ✅", "Spot on, Commander!", "Systems nominal"
 - Wrong: "Almost — tweak it and try again", "Close! Check the readout"
 - Never: "Wrong!", "Incorrect!", "Try harder"
@@ -1831,8 +1851,9 @@ For the post-flight report, capture a screenshot of the launched rocket:
 
 When complete, a 10-year-old should be able to:
 
-1. Open the app and pick (or create) his profile on the Commander Roster —
-   it works the same whether he's Artie, Walter, or any other name — then
+1. Open the app (titled "ROCKET LAB"), pick or create his profile on the
+   Commander Roster — it works the same whether he's Artie, Walter, or any
+   other name — and watch the app become "{his name}'s Rocket Lab"; then
    pick a real launch site (e.g. SaxaVord in Shetland) and see his 3D rocket
    on the pad there
 2. Pick "Low Orbit" as a destination
@@ -1855,8 +1876,9 @@ When complete, a 10-year-old should be able to:
     launch an advanced mission — arriving at secondary school in September
     having already *used* KS3 maths to fly rockets
 13. Hand the device to his brother, who switches to his own profile on the
-    Commander Roster and finds HIS own rocket, XP, mastery and missions —
-    completely untouched by anyone else's play
+    Commander Roster — the title flips to HIS name's Rocket Lab, with his own
+    rocket, XP, mastery and missions, completely untouched by anyone else's
+    play
 
 And at no point should he think "I'm doing maths homework." He should think
 "I'm building a rocket, and I need to figure out the right angle/measurement/

@@ -38,7 +38,19 @@ jobs:
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
           VITE_GEMINI_API_KEY_POOL: ${{ secrets.VITE_GEMINI_API_KEY_POOL }}
           VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
-        run: pnpm build
+        run: |
+          set +e
+          pnpm build 2>&1 | tee build.log
+          code=${PIPESTATUS[0]}
+          if [ "$code" != "0" ]; then
+            {
+              echo '### Build failed — last 80 lines'
+              echo '```'
+              tail -80 build.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit $code
       - uses: actions/configure-pages@v5
         with:
           enablement: true

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { db, type Attempt, type MissionRecord } from "../../db/db";
+import { telemetryInsight } from "../../ai/telemetryInsights";
 import { useRocketState } from "../../mission/useRocketState";
 import { CRITERIA } from "../../curriculum/criteria";
 import { KS2_STRANDS, KS3_STRANDS, type Strand } from "../../curriculum/types";
@@ -21,11 +22,15 @@ export function FlightLogPage() {
   const profile = useRocketState((s) => s.profile);
   const [attempts, setAttempts] = useState<Attempt[]>([]);
   const [missions, setMissions] = useState<MissionRecord[]>([]);
+  const [insight, setInsight] = useState<string | null>(null);
 
   useEffect(() => {
     if (!profile) return;
     void db.attempts.where("profileId").equals(profile.id).toArray().then(setAttempts);
-    void db.missions.where("profileId").equals(profile.id).reverse().sortBy("createdAt").then(setMissions);
+    void db.missions.where("profileId").equals(profile.id).reverse().sortBy("createdAt").then((ms) => {
+      setMissions(ms);
+      void telemetryInsight(profile.id, profile.name, ms).then(setInsight);
+    });
   }, [profile?.id]);
 
   if (!profile) return null;
@@ -58,6 +63,13 @@ export function FlightLogPage() {
       <h1 className="text-center font-display text-3xl font-bold tracking-widest text-cyan-300">
         📖 {profile.name.toUpperCase()}'S FLIGHT LOG
       </h1>
+
+      {insight && (
+        <div className="hud-panel border-violet-500/40 p-4 text-sm text-violet-100">
+          <div className="mb-1 text-xs font-bold tracking-widest text-violet-300">📡 TELEMETRY INSIGHT</div>
+          {insight}
+        </div>
+      )}
 
       <div className="hud-panel p-4">
         <div className="mb-2 text-xs font-bold tracking-widest text-cyan-300">🗺 KS2 SYSTEMS COVERAGE (81 criteria)</div>

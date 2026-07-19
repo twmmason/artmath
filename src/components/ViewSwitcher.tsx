@@ -20,6 +20,7 @@ export function ViewSwitcher({ siteName, getScreenshot, onPhoto }: Props) {
   const [style, setStyle] = useState<RenderStyle>("photorealistic");
   const [overlay, setOverlay] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [glitch, setGlitch] = useState(false);
 
   const shoot = async (quality: "fast" | "quality") => {
     const shot = getScreenshot();
@@ -29,6 +30,11 @@ export function ViewSwitcher({ siteName, getScreenshot, onPhoto }: Props) {
     const painted = hasKey()
       ? await generateMissionPhoto(shot, siteName, style, quality)
       : null;
+    if (hasKey() && !painted) {
+      // error path, not a silent downgrade — surface a gentle toast
+      setGlitch(true);
+      setTimeout(() => setGlitch(false), 4500);
+    }
     const final = painted ?? shot;
     setOverlay(final);
     onPhoto?.(final);
@@ -47,6 +53,11 @@ export function ViewSwitcher({ siteName, getScreenshot, onPhoto }: Props) {
       {busy && (
         <div className="absolute inset-x-0 top-16 z-30 text-center text-sm text-cyan-200 animate-pulse">
           developing photo… 📷
+        </div>
+      )}
+      {glitch && (
+        <div className="absolute inset-x-0 top-16 z-30 mx-auto w-fit rounded-full border border-amber-500/60 bg-space-900/95 px-4 py-1.5 text-center text-xs text-amber-200">
+          📷 Camera glitch — the AI darkroom hiccupped, so we saved the plain workshop shot instead.
         </div>
       )}
       <div className="absolute bottom-4 left-1/2 z-30 -translate-x-1/2 space-y-1.5 text-center">

@@ -33,8 +33,8 @@ export function MissionControlPage() {
   const scienceDone = mission?.stationTasksDone ?? 0;
 
   return (
-    <div className="relative flex h-[calc(100vh-3.5rem)]">
-      <div className="relative flex-1">
+    <div className="relative flex h-[calc(100vh-3.5rem)] overflow-hidden">
+      <div className="relative min-w-0 flex-1">
         <RocketScene cameraPosition={[0, 16, 26]} target={[0, 2, 0]}>
           <MissionControlWing
             unlocks={unlocks}

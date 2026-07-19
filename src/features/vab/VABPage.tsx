@@ -24,13 +24,12 @@ export function VABPage() {
   const selectPart = useRocketState((s) => s.selectPart);
   const startMission = useRocketState((s) => s.startMission);
   const [attempts, setAttempts] = useState<Attempt[]>([]);
-  const [panelOpen, setPanelOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!profile) return;
     void db.attempts.where("profileId").equals(profile.id).toArray().then(setAttempts);
-  }, [profile?.id, panelOpen]);
+  }, [profile?.id, selectedPart]);
 
   // ensure a mission exists (direct nav to /vab)
   useEffect(() => {
@@ -54,18 +53,22 @@ export function VABPage() {
 
   const onPartClick = (part: RocketPart) => {
     selectPart(part);
-    setPanelOpen(true);
   };
 
+  // The task panel is derived straight from the store: attaching a part from
+  // the catalogue selects it, so its engineering tasks open immediately.
+  const panelPart =
+    selectedPart && design.installedParts[selectedPart] ? selectedPart : null;
+
   return (
-    <div className="relative flex h-[calc(100vh-3.5rem)]">
+    <div className="relative flex h-[calc(100vh-3.5rem)] overflow-hidden">
       {/* parts tray */}
       <div className="z-30 w-60 shrink-0 border-r border-cyan-900/40 bg-space-900/80 p-3">
         <PartsTray partLevels={partLevels} />
       </div>
 
       {/* 3D assembly floor */}
-      <div className="relative flex-1">
+      <div className="relative min-w-0 flex-1">
         <RocketScene cameraPosition={[11, 8, 13]} target={[0, 5, 0]}>
           <SiteTerrain site={site} />
           <Rocket3D
@@ -129,12 +132,12 @@ export function VABPage() {
       </div>
 
       {/* stage panel (engineering tasks) */}
-      {panelOpen && selectedPart && design.installedParts[selectedPart] && (
+      {panelPart && (
         <div className="z-30 w-96 shrink-0 border-l border-cyan-900/40 bg-space-900/90 p-3">
           <StagePanel
-            part={selectedPart}
-            onCertified={() => setPanelOpen(false)}
-            onClose={() => setPanelOpen(false)}
+            part={panelPart}
+            onCertified={() => selectPart(null)}
+            onClose={() => selectPart(null)}
           />
         </div>
       )}

@@ -18,6 +18,7 @@ export function HangarPage() {
   const design = useRocketState((s) => s.design);
   const startMission = useRocketState((s) => s.startMission);
   const restoreMission = useRocketState((s) => s.restoreMission);
+  const updateProfile = useRocketState((s) => s.updateProfile);
   const mission = useRocketState((s) => s.mission);
   const [attempts, setAttempts] = useState<Attempt[]>([]);
   const [missionCount, setMissionCount] = useState(0);
@@ -45,7 +46,7 @@ export function HangarPage() {
 
   const begin = (destId: string) => {
     const dest = DESTINATIONS.find((d) => d.id === destId)!;
-    const plan = planMission(dest, attempts, missionCount);
+    const plan = planMission(dest, attempts, missionCount, 2, profile.academyUnlocked);
     startMission(destId, plan);
     if (dest.ks3) navigate("/missioncontrol?phase=science");
     else navigate("/vab");
@@ -92,6 +93,17 @@ export function HangarPage() {
             KS3 systems mastered: {Math.round(ks3Mastery(attempts) * 100)}%
           </div>
           <div className="text-slate-300">Missions flown: {missionCount}</div>
+          <button
+            onClick={() => updateProfile({ academyUnlocked: !profile.academyUnlocked })}
+            className={`mt-2 w-full rounded border px-2 py-1 text-left ${
+              profile.academyUnlocked
+                ? "border-violet-400/60 bg-violet-500/15 text-violet-200"
+                : "border-slate-600/50 text-slate-400 hover:bg-space-700"
+            }`}
+            aria-pressed={profile.academyUnlocked ?? false}
+          >
+            🎓 Year 7+ Academy access: {profile.academyUnlocked ? "ON" : "off"}
+          </button>
         </div>
       </div>
 
@@ -102,7 +114,7 @@ export function HangarPage() {
           </div>
           <div className="space-y-1.5">
             {DESTINATIONS.map((d) => {
-              const unlocked = destinationUnlocked(d.id, attempts, missionCount);
+              const unlocked = destinationUnlocked(d.id, attempts, missionCount, profile.academyUnlocked);
               return (
                 <button
                   key={d.id}

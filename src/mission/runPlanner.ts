@@ -35,6 +35,7 @@ export function planMission(
   attempts: Attempt[],
   missionCount: number,
   tasksPerPart = 2,
+  academyUnlocked = false,
 ): MissionPlan {
   const now = Date.now();
   const [minTier, maxTier] = destination.tierRange;
@@ -78,7 +79,7 @@ export function planMission(
   // Advanced destinations add a Mission Control science package (3–5 KS3 tasks)
   const stationTasks: PlannedTask[] = [];
   if (destination.ks3) {
-    const unlocks = stationUnlocks(attempts, missionCount);
+    const unlocks = stationUnlocks(attempts, missionCount, academyUnlocked);
     const openStations = STATIONS.filter((s) =>
       unlocks.find((u) => u.station === s.id && u.unlocked),
     );

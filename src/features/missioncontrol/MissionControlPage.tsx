@@ -28,7 +28,7 @@ export function MissionControlPage() {
   useEffect(load, [profile?.id]);
 
   if (!profile) return null;
-  const unlocks = stationUnlocks(attempts, missionCount);
+  const unlocks = stationUnlocks(attempts, missionCount, profile.academyUnlocked);
   const scienceNeeded = Math.max(3, mission?.plan?.stationTasks.length ?? 3);
   const scienceDone = mission?.stationTasksDone ?? 0;
 

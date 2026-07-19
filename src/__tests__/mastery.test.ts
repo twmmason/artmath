@@ -3,6 +3,7 @@ import {
   masteryForCriterion,
   ks2Mastery,
   stationUnlocks,
+  destinationUnlocked,
   partLevel,
   xpForAnswer,
 } from "../engine/mastery";
@@ -73,5 +74,22 @@ describe("mastery engine", () => {
     for (const code of ["4NF-1", "4NF-2"])
       for (let i = 0; i < 3; i++) atts.push(at(code, true));
     expect(partLevel("engine", atts)).toBe(2);
+  });
+});
+
+describe("Year 7+ Academy toggle", () => {
+  it("unlocks all six stations with no attempts when academyUnlocked", () => {
+    const u = stationUnlocks([], 0, true);
+    expect(u).toHaveLength(6);
+    expect(u.every((s) => s.unlocked)).toBe(true);
+    expect(u.every((s) => s.progress === 1)).toBe(true);
+  });
+  it("stations stay locked without the toggle and no attempts", () => {
+    const u = stationUnlocks([], 0, false);
+    expect(u.some((s) => s.unlocked)).toBe(false);
+  });
+  it("academy toggle opens Jupiter (needs 1 station)", () => {
+    expect(destinationUnlocked("jupiter", [], 0, true)).toBe(true);
+    expect(destinationUnlocked("jupiter", [], 0, false)).toBe(false);
   });
 });

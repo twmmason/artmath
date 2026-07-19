@@ -8,6 +8,7 @@ import { ProfileCard } from "./ProfileCard";
 export function RosterPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [name, setName] = useState("");
+  const [year7, setYear7] = useState(false);
   const setProfile = useRocketState((s) => s.setProfile);
   const navigate = useNavigate();
 
@@ -18,7 +19,7 @@ export function RosterPage() {
 
   const create = async (n: string) => {
     if (!n.trim()) return;
-    const p = newProfile(n);
+    const p = newProfile(n, year7);
     await db.profiles.put(p);
     pick(p);
   };
@@ -57,6 +58,15 @@ export function RosterPage() {
               aria-label="New commander name"
               className="w-full rounded border border-cyan-700/50 bg-space-900/80 px-2 py-1.5 text-sm text-white"
             />
+            <label className="flex items-center gap-2 text-[11px] text-slate-300">
+              <input
+                type="checkbox"
+                checked={year7}
+                onChange={(e) => setYear7(e.target.checked)}
+                aria-label="I'm in Year 7 or above — unlock the Astronaut Academy"
+              />
+              🎓 I'm in Year 7+ (unlock the Astronaut Academy)
+            </label>
             <button
               type="submit"
               disabled={!name.trim()}

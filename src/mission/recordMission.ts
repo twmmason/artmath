@@ -64,7 +64,7 @@ export async function recordMission(
     "strand-master",
     KS2_STRANDS.some((s) => strandMastery(s, attempts) >= 1),
   );
-  const unlocks = stationUnlocks(attempts, missions.length);
+  const unlocks = stationUnlocks(attempts, missions.length, profile.academyUnlocked);
   award("station-open", unlocks.some((u) => u.unlocked));
   award("secondary-ready", unlocks.every((u) => u.unlocked));
   award(

@@ -27,6 +27,8 @@ interface RocketState {
   selectedPart: RocketPart | null;
 
   setProfile: (p: Profile | null) => void;
+  /** Merge a partial update into the active profile (persists to Dexie, no reset). */
+  updateProfile: (patch: Partial<Profile>) => void;
   updateDesign: (patch: Partial<RocketDesign>) => void;
   applyEffect: (property: string, value: number) => void;
   attachPart: (variantId: string) => void;
@@ -74,6 +76,14 @@ export const useRocketState = create<RocketState>((set, get) => ({
   design: defaultRocketDesign(),
   mission: null,
   selectedPart: null,
+
+  updateProfile: (patch) => {
+    const cur = get().profile;
+    if (!cur) return;
+    const next = { ...cur, ...patch };
+    set({ profile: next });
+    void db.profiles.update(cur.id, patch);
+  },
 
   setProfile: (p) => {
     setActiveProfileId(p?.id ?? null);

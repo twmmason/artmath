@@ -150,7 +150,25 @@ export interface StationUnlockState {
 export function stationUnlocks(
   attempts: Attempt[],
   missionCount: number,
+  academyUnlocked = false,
 ): StationUnlockState[] {
+  // "I'm in Year 7+" toggle: full Astronaut Academy access, all stations live
+  if (academyUnlocked) {
+    const ALL: MissionStation[] = [
+      "rdLab",
+      "guidanceComputer",
+      "propulsionLab",
+      "trajectoryPlanner",
+      "missionAssurance",
+      "telemetryCentre",
+    ];
+    return ALL.map((station) => ({
+      station,
+      unlocked: true,
+      requirement: "Year 7+ Academy access granted",
+      progress: 1,
+    }));
+  }
   const npvNf = combinedStrandMastery(["NPV", "NF"], attempts);
 
   // Guidance: 70% of AS + the four 6AS/MD criteria mastered
@@ -221,10 +239,11 @@ export function destinationUnlocked(
   destinationId: string,
   attempts: Attempt[],
   missionCount: number,
+  academyUnlocked = false,
 ): boolean {
   const k2 = ks2Mastery(attempts);
   const k3 = ks3Mastery(attempts);
-  const stations = stationUnlocks(attempts, missionCount);
+  const stations = stationUnlocks(attempts, missionCount, academyUnlocked);
   const open = stations.filter((s) => s.unlocked).length;
   switch (destinationId) {
     case "orbit":

@@ -13,6 +13,8 @@ export interface Profile {
   launchSiteId: string;
   partLevels: Record<RocketPart, 1 | 2 | 3>;
   patches: string[];
+  /** "I'm in Year 7+" — unlocks the full Astronaut Academy (all KS3 stations). */
+  academyUnlocked?: boolean;
 }
 
 export interface Attempt {
@@ -63,6 +65,22 @@ class RocketLabDB extends Dexie {
       missions: "++id, profileId, destinationId, createdAt",
       missionSaves: "++id, profileId, updatedAt",
     });
+    // v2: Year 7+ Academy toggle on profiles (non-indexed field, default false)
+    this.version(2)
+      .stores({
+        profiles: "id",
+        attempts: "++id, profileId, criterionCode, createdAt",
+        missions: "++id, profileId, destinationId, createdAt",
+        missionSaves: "++id, profileId, updatedAt",
+      })
+      .upgrade((tx) =>
+        tx
+          .table("profiles")
+          .toCollection()
+          .modify((p: Profile) => {
+            if (p.academyUnlocked === undefined) p.academyUnlocked = false;
+          }),
+      );
   }
 }
 
@@ -78,7 +96,7 @@ export function slugify(name: string): string {
   );
 }
 
-export function newProfile(name: string): Profile {
+export function newProfile(name: string, academyUnlocked = false): Profile {
   return {
     id: slugify(name),
     name: name.trim(),
@@ -99,6 +117,7 @@ export function newProfile(name: string): Profile {
       booster: 1,
     },
     patches: [],
+    academyUnlocked,
   };
 }
 

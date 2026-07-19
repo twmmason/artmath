@@ -2,7 +2,12 @@ import { useState } from "react";
 import { defaultRocketDesign, type RocketDesign } from "../../three/rocketDesign";
 import { RocketScene } from "../../three/RocketScene";
 import { Rocket3D } from "../../three/Rocket3D";
+import { SiteTerrain } from "../../three/SiteTerrain";
+import { HAS_MAPS_KEY } from "../../three/GeoEnvironment";
 import { PerformanceDashboard } from "../../components/PerformanceDashboard";
+import { useMissionCamera } from "../../components/MissionCamera";
+import { useRocketState } from "../../mission/useRocketState";
+import { siteById } from "../../mission/launchSites";
 
 interface SliderDef {
   key: keyof RocketDesign;
@@ -27,6 +32,9 @@ const SLIDERS: SliderDef[] = [
 /** Free-design mode: sliders drive the design, dashboard shows consequences. */
 export function SandboxPage() {
   const [design, setDesign] = useState<RocketDesign>(defaultRocketDesign());
+  const profile = useRocketState((s) => s.profile);
+  const site = siteById(profile?.launchSiteId ?? "canaveral");
+  const { onCanvasReady, cameraEl } = useMissionCamera(site.name);
   return (
     <div className="flex h-[calc(100vh-3.5rem)]">
       <div className="z-30 w-80 shrink-0 space-y-2 overflow-auto border-r border-cyan-900/40 bg-space-900/80 p-4">
@@ -56,14 +64,12 @@ export function SandboxPage() {
         ))}
         <PerformanceDashboard design={design} />
       </div>
-      <div className="relative flex-1">
-        <RocketScene autoRotate cameraPosition={[12, 9, 14]}>
+      <div className="relative min-w-0 flex-1">
+        <RocketScene autoRotate cameraPosition={[12, 9, 14]} geoSite={site} onCanvasReady={onCanvasReady}>
           <Rocket3D design={design} />
-          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]} receiveShadow>
-            <circleGeometry args={[40, 40]} />
-            <meshStandardMaterial color="#1a2340" roughness={0.9} />
-          </mesh>
+          <SiteTerrain site={site} ground={!HAS_MAPS_KEY} />
         </RocketScene>
+        {cameraEl}
       </div>
     </div>
   );

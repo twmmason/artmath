@@ -10,6 +10,7 @@ import { RocketScene } from "../../three/RocketScene";
 import { Rocket3D } from "../../three/Rocket3D";
 import { SiteTerrain } from "../../three/SiteTerrain";
 import { HAS_MAPS_KEY } from "../../three/GeoEnvironment";
+import { useMissionCamera } from "../../components/MissionCamera";
 import { SitePicker } from "./SitePicker";
 import { ALL_PARTS, type RocketPart } from "../../three/rocketDesign";
 
@@ -27,6 +28,8 @@ export function HangarPage() {
   const [firstVisit, setFirstVisit] = useState(false);
   const [hasSave, setHasSave] = useState(false);
   const navigate = useNavigate();
+  const siteName = siteById(profile?.launchSiteId ?? "canaveral").name;
+  const { onCanvasReady, cameraEl } = useMissionCamera(siteName);
 
   useEffect(() => {
     if (!profile) return;
@@ -67,7 +70,7 @@ export function HangarPage() {
 
   return (
     <div className="relative h-[calc(100vh-3.5rem)]">
-      <RocketScene autoRotate cameraPosition={[14, 9, 16]} geoSite={site}>
+      <RocketScene autoRotate cameraPosition={[14, 9, 16]} geoSite={site} onCanvasReady={onCanvasReady}>
         <SiteTerrain site={site} ground={!HAS_MAPS_KEY} />
         <Rocket3D design={design} partLevels={partLevels} />
       </RocketScene>
@@ -160,6 +163,8 @@ export function HangarPage() {
           🛰 Mission Control Wing (KS3 Advanced Programme)
         </button>
       </div>
+
+      {cameraEl}
 
       {(showSites || firstVisit) && (
         <SitePicker

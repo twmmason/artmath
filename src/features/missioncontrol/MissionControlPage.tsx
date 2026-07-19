@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { db, type Attempt } from "../../db/db";
 import { useRocketState } from "../../mission/useRocketState";
 import { stationUnlocks } from "../../engine/mastery";
+import { siteById } from "../../mission/launchSites";
 import { RocketScene } from "../../three/RocketScene";
 import { MissionControlWing } from "../../three/MissionControlWing";
 import { StationPanel } from "./StationPanel";
@@ -29,13 +30,14 @@ export function MissionControlPage() {
 
   if (!profile) return null;
   const unlocks = stationUnlocks(attempts, missionCount, profile.academyUnlocked);
+  const site = siteById(profile.launchSiteId);
   const scienceNeeded = Math.max(3, mission?.plan?.stationTasks.length ?? 3);
   const scienceDone = mission?.stationTasksDone ?? 0;
 
   return (
     <div className="relative flex h-[calc(100vh-3.5rem)] overflow-hidden">
       <div className="relative min-w-0 flex-1">
-        <RocketScene cameraPosition={[0, 16, 26]} target={[0, 2, 0]}>
+        <RocketScene cameraPosition={[0, 16, 26]} target={[0, 2, 0]} geoSite={site}>
           <MissionControlWing
             unlocks={unlocks}
             selected={selected}

@@ -10,6 +10,8 @@ import { RocketScene } from "../../three/RocketScene";
 import { Rocket3D } from "../../three/Rocket3D";
 import { AttachmentNodes } from "../../three/AttachmentNodes";
 import { SiteTerrain } from "../../three/SiteTerrain";
+import { HAS_MAPS_KEY } from "../../three/GeoEnvironment";
+import { useMissionCamera } from "../../components/MissionCamera";
 import { PartsTray } from "./PartsTray";
 import { StagePanel } from "./StagePanel";
 import { PerformanceDashboard } from "../../components/PerformanceDashboard";
@@ -25,6 +27,9 @@ export function VABPage() {
   const startMission = useRocketState((s) => s.startMission);
   const [attempts, setAttempts] = useState<Attempt[]>([]);
   const navigate = useNavigate();
+  const { onCanvasReady, cameraEl } = useMissionCamera(
+    siteById(profile?.launchSiteId ?? "canaveral").name,
+  );
 
   useEffect(() => {
     if (!profile) return;
@@ -69,8 +74,8 @@ export function VABPage() {
 
       {/* 3D assembly floor */}
       <div className="relative min-w-0 flex-1">
-        <RocketScene cameraPosition={[11, 8, 13]} target={[0, 5, 0]}>
-          <SiteTerrain site={site} />
+        <RocketScene cameraPosition={[11, 8, 13]} target={[0, 5, 0]} geoSite={site} onCanvasReady={onCanvasReady}>
+          <SiteTerrain site={site} ground={!HAS_MAPS_KEY} />
           <Rocket3D
             design={design}
             assemblyMode
@@ -87,7 +92,7 @@ export function VABPage() {
         </div>
 
         {/* certification board */}
-        <div className="absolute bottom-3 left-1/2 z-30 flex -translate-x-1/2 flex-wrap items-center justify-center gap-1.5 rounded-xl border border-cyan-800/50 bg-space-900/90 px-3 py-2">
+        <div className="absolute bottom-16 left-1/2 z-30 flex -translate-x-1/2 flex-wrap items-center justify-center gap-1.5 rounded-xl border border-cyan-800/50 bg-space-900/90 px-3 py-2">
           {installed.length === 0 && (
             <span className="text-xs text-slate-400">
               Drag or click parts from the catalogue to start building →
@@ -124,6 +129,8 @@ export function VABPage() {
             </button>
           )}
         </div>
+
+        {cameraEl}
 
         {/* performance dashboard */}
         <div className="absolute right-3 top-3 z-30 w-72">

@@ -9,6 +9,7 @@ import { destinationUnlocked, ks2Mastery, ks3Mastery, partLevel } from "../../en
 import { RocketScene } from "../../three/RocketScene";
 import { Rocket3D } from "../../three/Rocket3D";
 import { SiteTerrain } from "../../three/SiteTerrain";
+import { HAS_MAPS_KEY } from "../../three/GeoEnvironment";
 import { SitePicker } from "./SitePicker";
 import { ALL_PARTS, type RocketPart } from "../../three/rocketDesign";
 
@@ -66,8 +67,8 @@ export function HangarPage() {
 
   return (
     <div className="relative h-[calc(100vh-3.5rem)]">
-      <RocketScene autoRotate cameraPosition={[14, 9, 16]}>
-        <SiteTerrain site={site} />
+      <RocketScene autoRotate cameraPosition={[14, 9, 16]} geoSite={site}>
+        <SiteTerrain site={site} ground={!HAS_MAPS_KEY} />
         <Rocket3D design={design} partLevels={partLevels} />
       </RocketScene>
 

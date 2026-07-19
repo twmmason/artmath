@@ -16,6 +16,8 @@ export interface Rocket3DProps {
   onPartClick?: (part: RocketPart) => void;
   partLevels?: Partial<Record<RocketPart, 1 | 2 | 3>>;
   flame?: number;
+  /** plume stretch (atmosphere thinning) — passed to Engine3D. */
+  plumeStretch?: number;
   boosterSeparation?: number;
 }
 
@@ -27,6 +29,7 @@ export function Rocket3D({
   onPartClick,
   partLevels,
   flame = 0,
+  plumeStretch = 1,
   boosterSeparation = 0,
 }: Rocket3DProps) {
   const has = (part: RocketPart) =>
@@ -61,6 +64,7 @@ export function Rocket3D({
           onClick={onPartClick}
           level={lvl("engine")}
           flame={flame}
+          plumeStretch={plumeStretch}
         />
       )}
       {has("fuelTank") && (

@@ -10,7 +10,8 @@ import { generateChecklist } from "../../engine";
 import { makeRng } from "../../engine/rng";
 import { TaskRenderer, type TaskResult } from "../../components/TaskRenderer";
 import { RocketScene, captureCanvas } from "../../three/RocketScene";
-import { LaunchAnimation } from "../../three/LaunchAnimation";
+import { LaunchAnimation, SHOT_NAMES } from "../../three/LaunchAnimation";
+import { HAS_MAPS_KEY } from "../../three/GeoEnvironment";
 import { SiteTerrain } from "../../three/SiteTerrain";
 import { recordMission } from "../../mission/recordMission";
 import { setLastFlight } from "../../mission/lastFlight";
@@ -35,6 +36,8 @@ export function LaunchPage() {
   const [passed, setPassed] = useState<boolean[]>([]);
   const [flight, setFlight] = useState<FlightResult | null>(null);
   const [recording, setRecording] = useState(false);
+  const [shotOverride, setShotOverride] = useState<number | null>(null);
+  const [shotLabel, setShotLabel] = useState<string>("📺 Auto director");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const savedRef = useRef(false);
@@ -171,14 +174,34 @@ export function LaunchPage() {
               cameraPosition={[16, 10, 20]}
               target={[0, 6, 0]}
               onCanvasReady={(c) => (canvasRef.current = c)}
+              geoSite={site}
+              controlsEnabled={false}
             >
-              <SiteTerrain site={site} />
+              <SiteTerrain site={site} ground={!HAS_MAPS_KEY} />
               <LaunchAnimation
                 design={design}
                 flight={flight}
+                shotOverride={shotOverride}
+                onShot={(l) => setShotLabel(shotOverride === null ? `${l} (auto)` : l)}
                 onComplete={() => void finishFlight(flight)}
               />
             </RocketScene>
+            <button
+              onClick={() =>
+                setShotOverride((cur) => {
+                  const next = cur === null ? 0 : cur + 1;
+                  if (next >= SHOT_NAMES.length) {
+                    setShotLabel("📺 Auto director");
+                    return null;
+                  }
+                  setShotLabel(SHOT_NAMES[next]);
+                  return next;
+                })
+              }
+              className="absolute left-4 top-4 z-30 rounded-full border border-cyan-600/50 bg-space-900/90 px-3 py-1.5 text-xs text-cyan-200"
+            >
+              {shotLabel} — tap to switch
+            </button>
             <button
               onClick={toggleRecording}
               className={`absolute right-4 top-4 z-30 rounded-full border px-3 py-1.5 text-xs ${

@@ -12,14 +12,16 @@ const TERRAIN_COLORS: Record<LaunchSite["terrain"], string> = {
  * Tiles integration is the Phase 7 upgrade path; this offline fallback keeps
  * launches working with no network — the launch is never blocked on tiles.)
  */
-export function SiteTerrain({ site }: { site: LaunchSite }) {
+export function SiteTerrain({ site, ground = true }: { site: LaunchSite; ground?: boolean }) {
   const color = TERRAIN_COLORS[site.terrain];
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} receiveShadow>
-        <circleGeometry args={[120, 48]} />
-        <meshStandardMaterial color={color} roughness={1} />
-      </mesh>
+      {ground && (
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} receiveShadow>
+          <circleGeometry args={[120, 48]} />
+          <meshStandardMaterial color={color} roughness={1} />
+        </mesh>
+      )}
       {/* concrete pad + blast deflector */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <circleGeometry args={[6, 32]} />
@@ -41,7 +43,7 @@ export function SiteTerrain({ site }: { site: LaunchSite }) {
         </mesh>
       </group>
       {/* ocean/horizon flavour for coastal & island sites */}
-      {(site.terrain === "coastal" || site.terrain === "island") && (
+      {ground && (site.terrain === "coastal" || site.terrain === "island") && (
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[80, -0.2, 0]}>
           <circleGeometry args={[100, 32]} />
           <meshStandardMaterial color="#123a5e" roughness={0.3} metalness={0.1} />

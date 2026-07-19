@@ -75,7 +75,47 @@ Done-when verified: coverage check reports KS2 81/81 ✅; every part attachable 
 - [x] KS3 patches ("Secondary-Ready" etc.); Flight Log KS3 domain × station grid; /dev/status full 146 grid
 Done-when verified: `pnpm verify` reports 146/146; stations unlock from KS2 mastery; Jupiter missions include station tasks.
 
+## KS3 Expansion — remaining work (docs/PROMPT_OTHER.md)   Status: ✅ COMPLETE (2026-07-19)
+
+### Phase 9: "I'm in Year 7+" Academy toggle   ✅
+- [x] `academyUnlocked` on Profile + Dexie v2 migration (`src/db/db.ts`)
+- [x] `stationUnlocks`/`destinationUnlocked`/`planMission` accept the override — all six stations live, KS3 destinations use KS3 gates only
+- [x] Roster new-commander checkbox + Hangar "Year 7+ Academy access" toggle (persists via `updateProfile`)
+- [x] Tests: academy override unlocks all stations & Jupiter with zero attempts (mastery.test.ts)
+
+### Phase 10: takram atmosphere + Google 3D Tiles   ✅
+- [x] Sanctioned stack upgrade (Gaudi parity): React 19, R3F v9.6, drei 10, three 0.185, postprocessing 6.39,
+      @takram/three-atmosphere 0.19 + clouds 0.7 + geospatial 0.9 + effects 0.6, 3d-tiles-renderer 0.4.28 — `pnpm verify` stayed green
+- [x] `three/GeoEnvironment.tsx` (adapted from Gaudi's GeospatialEnvironment): ECEF origin rebasing at the site's lat/lon,
+      physically-based Sky/Stars/SunLight/SkyLight, Google Photorealistic 3D Tiles (relit + dither-cleared pad disc),
+      volumetric CloudLayer + AerialPerspective + LensFlare + Bloom + SMAA + AGX tone mapping + Vignette
+- [x] Key validation, tiles error boundary + auto-retry, graceful fallback to stylised terrain (error path only)
+- [x] Wired into Hangar + Launch via `RocketScene geoSite` prop (VAB stays on the fast simple environment)
+
+### Phase 11: Cinematic launch director   ✅
+- [x] 5 shots cut on the rocket's ACTUAL simulated altitude: Pad Cam → Tower Cam → Ground Tracking Telephoto
+      (fov tightens as the rocket shrinks) → Chase Cam → Orbit Reveal; damped moves, ignition camera shake
+- [x] "📺 shot — tap to switch" manual cycle button; `prefers-reduced-motion` = single steady tracking shot
+- [x] Layered engine plume (bright core / mid / expanding translucent outer cone + point light) that stretches as the
+      atmosphere thins; pad steam billow at ignition; OrbitControls disabled during flight
+
+### Phase 12: Gemini touches + Mission Camera audit   ✅
+- [x] Chief Engineer pitches Year 7–9 explanations when the task is a KS3 criterion
+- [x] Telemetry insight on the Flight Log: deterministic stats first, Gemini narrates ONE pattern (validated, cached, fallback)
+- [x] Mission Camera "camera glitch" toast when the image model fails with a live key (no silent downgrade)
+
+### KS3-expansion walkthrough sign-off (2026-07-19, real keys, localhost:3003)
+- ✅ New commander created with "I'm in Year 7+" checked → all six Mission Control stations ⚡ ONLINE at 0 XP; Jupiter unlocked
+- ✅ Hangar at SaxaVord shows REAL Google 3D Tiles Shetland coastline + takram sky with volumetric clouds
+- ✅ Pre-flight checklist (5/5) → full launch watched end-to-end: Tracking Cam telephoto through the real cloud deck,
+      Chase Cam alongside with sun flare, plume stretching with altitude — shots tracked the rocket throughout
+- ✅ After-action report: 150 km arrival, flight replay chart with annotated events, Flight Director debrief,
+      patches incl. "Power Up" + "Secondary-Ready"
+
 ## Verification log
+- 2026-07-19 (KS3 expansion) `pnpm verify`: tsc clean · 177/177 tests · 146/146 coverage — after React 19/R3F 9/takram upgrade
+
+## Verification log (original build)
 - 2026-07-19 `pnpm verify`: tsc clean · 174/174 tests · `KS2 81/81 ✅  KS3 65/65 ✅  parts 8/8  stations 6/6` · 146/146 covered
 
 ## §15 Success criteria walkthrough sign-offs

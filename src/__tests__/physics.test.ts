@@ -39,9 +39,10 @@ describe("simulateFlight", () => {
   });
   it("poor quality flies lower than perfect quality", () => {
     const d = defaultRocketDesign();
-    // very high target so neither flight hits the arrival cutoff — compares raw apogee
-    const good = simulateFlight(d, 5000, 1);
-    const poor = simulateFlight(d, 5000, 0.3);
+    // target set unreachably high so neither flight triggers the arrival cutoff —
+    // we compare raw apogee only.  quality curve is gentle (0 → q=0.65, 1 → q=1).
+    const good = simulateFlight(d, 999999, 1);
+    const poor = simulateFlight(d, 999999, 0);
     expect(poor.maxAltitudeKm).toBeLessThan(good.maxAltitudeKm);
   });
   it("boosters create a staging event", () => {

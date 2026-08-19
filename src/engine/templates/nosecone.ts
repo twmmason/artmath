@@ -134,7 +134,7 @@ export const noseconeTemplates: TemplateMap = {
         widget: "protractor",
         config: { targetAngle: 90, mode: "set" },
       },
-      tolerance: 3,
+      tolerance: 5,
       rocketEffect: {
         property: "noseAngle",
         correctValue: 40,
@@ -252,7 +252,7 @@ export const noseconeTemplates: TemplateMap = {
         widget: "protractor",
         config: { showAngle: angle, mode: "measure" },
       },
-      tolerance: 3,
+      tolerance: 5,
       rocketEffect: {
         property: "noseAngle",
         correctValue: Math.min(angle, 60),

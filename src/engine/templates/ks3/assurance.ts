@@ -28,7 +28,7 @@ export const assuranceTemplates: TemplateMap = {
         `Write ${clear} out of ${total} as a decimal.`,
       ],
       visual: { widget: "riskDial", config: { mode: "set", target: answer } },
-      tolerance: 0.02,
+      tolerance: 0.04,
       rocketEffect: { property: "hullPanels", correctValue: 60, incorrectValue: 57, unit: "" },
     });
   },
@@ -55,7 +55,7 @@ export const assuranceTemplates: TemplateMap = {
         `How far short of 1 do the two known outcomes fall?`,
       ],
       visual: { widget: "riskDial", config: { mode: "sumToOne", known: perfect + wobble } },
-      tolerance: 0.005,
+      tolerance: 0.01,
       rocketEffect: { property: "powerBalanced", correctValue: 1, incorrectValue: 0, unit: "" },
     });
   },

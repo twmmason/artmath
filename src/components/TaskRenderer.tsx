@@ -109,8 +109,13 @@ export function TaskRenderer({ task, profileName, onResolve, onEffect }: TaskRen
     setAttempts(n);
     if (n === 1) {
       setFeedback(FALLBACK_NUDGE);
-    } else if (n === 2) {
-      setFeedback("Close! Check the readout — here's a nudge from the Flight Director:");
+    } else if (n <= 3) {
+      // Attempts 2 & 3: show progressive hints (young learners get extra chances)
+      setFeedback(
+        n === 2
+          ? "Close! Check the readout — here's a nudge from the Flight Director:"
+          : "Nearly there — one more clue from the Flight Director:",
+      );
       const staticHint = fallbackHint(task.hints, hintsUsed);
       setHintText(staticHint);
       setHintsUsed((h) => h + 1);

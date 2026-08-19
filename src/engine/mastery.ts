@@ -25,8 +25,9 @@ export interface CriterionMastery {
 
 /**
  * Derive mastery state for one criterion from its attempts (oldest → newest).
- * Mastery = 3 correct in a row at tier >= 2. A wrong answer resets streaks
- * and the spaced-repetition interval.
+ * Mastery = 2 correct in a row (any tier). A wrong answer resets streaks
+ * and the spaced-repetition interval.  Lowered from the original 3-at-tier-2
+ * so younger learners can progress without a punishing streak requirement.
  */
 export function masteryForCriterion(
   code: string,
@@ -45,9 +46,8 @@ export function masteryForCriterion(
   for (const a of rows) {
     if (a.correct) {
       streak += 1;
-      if (a.tier >= 2) masteryStreak += 1;
-      else masteryStreak = 0;
-      if (!mastered && masteryStreak >= 3) {
+      masteryStreak += 1;
+      if (!mastered && masteryStreak >= 2) {
         mastered = true;
         masteredAt = a.createdAt;
       } else if (mastered) {

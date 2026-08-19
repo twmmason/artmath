@@ -19,25 +19,22 @@ const at = (code: string, correct: boolean, tier = 2, daysAgo = 0): Attempt => (
 });
 
 describe("mastery engine", () => {
-  it("mastery = 3 correct in a row at tier >= 2", () => {
-    const notYet = masteryForCriterion("4NF-1", [at("4NF-1", true), at("4NF-1", true)]);
+  it("mastery = 2 correct in a row at any tier", () => {
+    const notYet = masteryForCriterion("4NF-1", [at("4NF-1", true)]);
     expect(notYet.mastered).toBe(false);
     const done = masteryForCriterion("4NF-1", [
       at("4NF-1", true),
       at("4NF-1", true),
-      at("4NF-1", true),
     ]);
     expect(done.mastered).toBe(true);
-    const tier1Only = masteryForCriterion("4NF-1", [
-      at("4NF-1", true, 1),
+    const tier1Also = masteryForCriterion("4NF-1", [
       at("4NF-1", true, 1),
       at("4NF-1", true, 1),
     ]);
-    expect(tier1Only.mastered).toBe(false);
+    expect(tier1Also.mastered).toBe(true);
   });
   it("a wrong answer resets the streak", () => {
     const m = masteryForCriterion("4NF-1", [
-      at("4NF-1", true),
       at("4NF-1", true),
       at("4NF-1", false),
       at("4NF-1", true),
@@ -47,7 +44,6 @@ describe("mastery engine", () => {
   });
   it("spaced repetition: mastered items become due after interval", () => {
     const m = masteryForCriterion("4NF-1", [
-      at("4NF-1", true, 2, 3),
       at("4NF-1", true, 2, 3),
       at("4NF-1", true, 2, 3),
     ]);

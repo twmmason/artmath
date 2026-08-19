@@ -65,7 +65,7 @@ export const payloadTemplates: TemplateMap = {
         widget: "numberLine",
         config: { min: 0, max: 1, target: num / den, step: 1 / den },
       },
-      tolerance: 0.06,
+      tolerance: 0.12,
       rocketEffect: {
         property: "payloadPerPod",
         correctValue: 50,

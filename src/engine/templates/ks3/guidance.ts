@@ -352,7 +352,7 @@ export const guidanceTemplates: TemplateMap = {
         "Follow the curve until it meets the limit line.",
       ],
       visual: { widget: "graph", config: { mode: "drain", start, rate: dropPerHour, limit } },
-      tolerance: 0.5,
+      tolerance: 1,
       rocketEffect: { property: "powerBalanced", correctValue: 1, incorrectValue: 0, unit: "" },
     });
   },

@@ -125,7 +125,7 @@ export const rdlabTemplates: TemplateMap = {
         `Then climb up from ${start} on a number line.`,
       ],
       visual: { widget: "numberLine", config: { min: -6, max: 6, target: answer, step: 0.1 } },
-      tolerance: 0.05,
+      tolerance: 0.1,
       rocketEffect: { property: "powerBalanced", correctValue: 1, incorrectValue: 0, unit: "" },
     });
   },
@@ -235,7 +235,7 @@ export const rdlabTemplates: TemplateMap = {
         "Count how many places it slid — that's the power.",
       ],
       visual: { widget: "equation", config: { formula: `${formatThousands(b.plain)} = A × 10^${b.n}` } },
-      tolerance: 0.001,
+      tolerance: 0.01,
       rocketEffect: { property: "hullHeight", correctValue: 9, incorrectValue: 8, unit: "m" },
     });
   },
@@ -346,7 +346,7 @@ export const rdlabTemplates: TemplateMap = {
         "One hundred centimetres make a metre.",
       ],
       visual: { widget: "ruler", config: { mode: "convert", a: metres, b: cm } },
-      tolerance: 0.01,
+      tolerance: 0.02,
       rocketEffect: { property: "fuelRatio", correctValue: 2.5, incorrectValue: 2.3, unit: "" },
     });
   },
@@ -403,7 +403,7 @@ export const rdlabTemplates: TemplateMap = {
         "Half of 0.1 is 0.05.",
       ],
       visual: { widget: "numberLine", config: { min: lower - 0.1, max: upper + 0.1, target: lower, step: 0.01 } },
-      tolerance: 0.001,
+      tolerance: 0.01,
       rocketEffect: { property: "hullHeight", correctValue: 8, incorrectValue: 7.8, unit: "m" },
     });
   },

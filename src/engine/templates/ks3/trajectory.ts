@@ -82,7 +82,7 @@ export const trajectoryTemplates: TemplateMap = {
         "Check you're reading the correct scale on the protractor.",
       ],
       visual: { widget: "protractor", config: { showAngle: angle, mode: "measure" } },
-      tolerance: 3,
+      tolerance: 5,
       rocketEffect: { property: "hullHeight", correctValue: 8, incorrectValue: 7.7, unit: "m" },
     });
   },

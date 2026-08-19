@@ -31,7 +31,7 @@ export const fuelTemplates: TemplateMap = {
         widget: "numberLine",
         config: { min: 0, max: 20, target: n, step: 1 },
       },
-      tolerance: 0.5,
+      tolerance: 1,
       rocketEffect: {
         property: "tankFill",
         correctValue: n / 20,
@@ -196,7 +196,7 @@ export const fuelTemplates: TemplateMap = {
         widget: "numberLine",
         config: { min: 0, max: 5, target: n, step: 0.1 },
       },
-      tolerance: 0.1,
+      tolerance: 0.25,
       rocketEffect: {
         property: "tankFill",
         correctValue: n / 5,

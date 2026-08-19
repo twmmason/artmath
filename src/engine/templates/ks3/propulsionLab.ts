@@ -54,7 +54,7 @@ export const propulsionLabTemplates: TemplateMap = {
         "Then convert centimetres to metres.",
       ],
       visual: { widget: "scaleDiagram", config: { scale, paperCm } },
-      tolerance: 0.01,
+      tolerance: 0.02,
       rocketEffect: { property: "hullHeight", correctValue: Math.min(12, realM), incorrectValue: 7, unit: "m" },
     });
   },
@@ -171,7 +171,7 @@ export const propulsionLabTemplates: TemplateMap = {
         `Share ${o} between the ${f} kilograms of fuel.`,
       ],
       visual: { widget: "ratioMixer", config: { ratioA: f, ratioB: o, mode: "multiplier" } },
-      tolerance: 0.01,
+      tolerance: 0.02,
       rocketEffect: { property: "fuelRatio", correctValue: answer, incorrectValue: 2, unit: "" },
     });
   },
@@ -197,7 +197,7 @@ export const propulsionLabTemplates: TemplateMap = {
         `How much does the line climb for ONE litre of fuel?`,
       ],
       visual: { widget: "graph", config: { mode: "ratioLine", x1, y1 } },
-      tolerance: 0.01,
+      tolerance: 0.02,
       rocketEffect: { property: "fuelRatio", correctValue: y1 / x1, incorrectValue: 2, unit: "" },
     });
   },

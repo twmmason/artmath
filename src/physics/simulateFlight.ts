@@ -9,6 +9,8 @@ import { computePerformance } from "./computePerformance";
  *
  * @param qualityFactor 0..1 — fraction of engineering tasks answered correctly;
  *   degrades effective thrust & drag slightly (parts at incorrectValue).
+ *   The curve is intentionally gentle so young learners (50-70 % correct)
+ *   still see a successful flight on early destinations.
  */
 export function simulateFlight(
   design: RocketDesign,
@@ -16,7 +18,9 @@ export function simulateFlight(
   qualityFactor = 1,
 ): FlightResult {
   const perf = computePerformance(design);
-  const q = Math.max(0.3, Math.min(1, qualityFactor));
+  // Gentle curve: floor at 0.65 so even many wrong answers leave a flyable rocket.
+  // 0 % correct → q = 0.65, 50 % → q = 0.825, 70 % → q = 0.895, 100 % → q = 1.
+  const q = Math.max(0.65, Math.min(1, 0.65 + qualityFactor * 0.35));
 
   const samples: FlightSample[] = [];
   const events: { t: number; label: string }[] = [];
@@ -51,7 +55,7 @@ export function simulateFlight(
     // atmospheric density falls off with altitude
     const airDensity = Math.exp(-alt / 8500);
     const dragN =
-      0.5 * airDensity * (perf.dragCoeff + (1 - q) * 0.1) * v * Math.abs(v) * 3;
+      0.5 * airDensity * (perf.dragCoeff + (1 - q) * 0.05) * v * Math.abs(v) * 3;
     const accel = (thrustN - weight - dragN) / Math.max(mass, 1);
 
     v += accel * dt;

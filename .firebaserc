@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "octo-science"
+  },
+  "targets": {
+    "octo-science": {
+      "hosting": {
+        "rocketmaths": ["rocketmaths"]
+      }
+    }
+  }
+}
